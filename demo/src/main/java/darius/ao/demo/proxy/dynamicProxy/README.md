@@ -54,22 +54,23 @@ try{
 逐层追踪源码：
 
 ```java
-->Object object=proxy.invokeSuper(obj,args)
+->Target proxy = (Target) enhancer.create();
+->return createHelper();
 ->
-this.init();    // 会创建this.classInfo对象
-MethodProxy.FastClassInfo fci=this.fastClassInfo;
-return fci.f2.invoke(fci.i2,obj,args);    // f2就是一个FastClass对象
-// 要查看invoke方法就需要知道具体的FastClass，也就是f2
-->init
-->fci.f2 = helper(ci, ci.c2);
-->
-    Generator g = new Generator();
-    ...
-    return g.create();
-->create
-->return (FastClass)super.create(this.type.getName());
-->return this.firstInstance(gen);   // 随便点进一个具体的实现，会发现就是通过反射来创建对象
-->return this.classOnly ? type : ReflectUtils.newInstance(type);
+return super.create(...);
+...
+byte[] b = strategy.generate(this);   // 猜测是这里创建了代理对象的字节码
+...
+gen = ReflectUtils.defineClass(className, b, loader);
+...
+return firstInstance(gen);    // 发现该方法直接抛异常，需要子类实现
+->(回到enhancer)protected Object firstInstance(Class type);
+->return createUsingReflection(type);
+->setThreadCallbacks(type, callbacks);  // callbacks就是我们开始设置的，被增强后的方法；里面只有一个方法调用，进入
+    ->
+    Method setter = getCallbacksSetter(type, methodName);
+    setter.invoke(null, new Object[]{ callbacks });
+return ReflectUtils.newInstance(type);
 ```
 
 本质上是利用ASM开源包，将真实对象类的class文件加载进来，通过修改字节码生成其子类，覆盖父类相应的方法

@@ -7,6 +7,9 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
+/**
+ * TODO 究竟怎么生成的代理对象没有从本质上搞明白
+ */
 public class CglibProxyDemo {
     public static void main(String[] args) {
         //创建Enhancer对象，类似于JDK动态代理的Proxy类，下一步就是设置几个参数
@@ -49,6 +52,7 @@ class DariusMethodInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         System.out.println("before " + method.getName());
+        // 调用原方法
         Object object = proxy.invokeSuper(obj, args);
         System.out.println("after " + method.getName());
         return object;
