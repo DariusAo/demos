@@ -60,10 +60,12 @@ try{
 return super.create(...);
 ...
 byte[] b = strategy.generate(this);   // 猜测是这里创建了代理对象的字节码
+        ->transform(cg).generateClass(cw);
+        ->进入generateClass();    // 回到Enhancer，代理类即是在这个方法里面生成的，在generate方法中又将其转为了字节码
 ...
-gen = ReflectUtils.defineClass(className, b, loader);
+gen = ReflectUtils.defineClass(className, b, loader);   // 定义代理类
 ...
-return firstInstance(gen);    // 发现该方法直接抛异常，需要子类实现
+return firstInstance(gen);    // 发现该方法直接抛异常，需要子类实现；另外，根据名字即可猜测该方法是返回参数类的实例
 ->(回到enhancer)protected Object firstInstance(Class type);
 ->return createUsingReflection(type);
 ->setThreadCallbacks(type, callbacks);  // callbacks就是我们开始设置的，被增强后的方法；里面只有一个方法调用，进入

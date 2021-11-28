@@ -17,7 +17,7 @@ public class CglibProxyDemo {
         //设置目标类的字节码文件
         enhancer.setSuperclass(Target.class);
         //设置回调函数
-        enhancer.setCallback(new DariusMethodInterceptor());
+        enhancer.setCallback(new ElvisMethodInterceptor());
 
         //这里的creat方法就是正式创建代理类
         Target proxy = (Target) enhancer.create();
@@ -47,7 +47,7 @@ class Target {
 }
 
 
-class DariusMethodInterceptor implements MethodInterceptor {
+class ElvisMethodInterceptor implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
