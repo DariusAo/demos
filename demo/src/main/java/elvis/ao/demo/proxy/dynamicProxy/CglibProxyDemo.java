@@ -1,4 +1,4 @@
-package darius.ao.demo.proxy.dynamicProxy;
+package elvis.ao.demo.proxy.dynamicProxy;
 
 
 import net.sf.cglib.proxy.Enhancer;

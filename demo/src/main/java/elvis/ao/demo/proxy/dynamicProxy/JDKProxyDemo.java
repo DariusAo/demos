@@ -1,4 +1,4 @@
-package darius.ao.demo.proxy.dynamicProxy;
+package elvis.ao.demo.proxy.dynamicProxy;
 
 
 import java.lang.reflect.InvocationHandler;
@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
 public class JDKProxyDemo {
     public static void main(String[] args) {
         SayImpl say = new SayImpl();
-        DariusInvocationHandler handler = new DariusInvocationHandler(say);
+        ElvisInvocationHandler handler = new ElvisInvocationHandler(say);
         Say proxy = (Say) ProxyFactory.getProxyInstance(say, handler);
         proxy.hello("darius");
         proxy.mmp("gdz");
@@ -33,10 +33,10 @@ class SayImpl implements Say {
     }
 }
 
-class DariusInvocationHandler implements InvocationHandler {
+class ElvisInvocationHandler implements InvocationHandler {
     private Object target;
 
-    public DariusInvocationHandler(Object target) {
+    public ElvisInvocationHandler(Object target) {
         this.target = target;
     }
 
